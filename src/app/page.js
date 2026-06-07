@@ -1,65 +1,111 @@
-import Image from "next/image";
+import React from 'react'
 
-export default function Home() {
+const page = () => {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    
+<div className="min-h-screen bg-[#f4f3ef] flex flex-col font-sans">
+
+  {/* Navbar */}
+  <nav className="bg-white border-b border-gray-100 shadow-sm px-6 py-4">
+    <div className="max-w-4xl mx-auto flex items-center justify-between">
+
+      {/* Logo */}
+      <div className="flex items-center gap-2">
+        <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
+          <rect width="36" height="36" rx="10" fill="#1a1035" />
+          <circle cx="18" cy="18" r="8" stroke="white" strokeWidth="2" />
+          <circle cx="18" cy="18" r="3" fill="white" />
+        </svg>
+        <span className="text-gray-900 font-bold text-lg tracking-tight">Orion</span>
+      </div>
+
+      {/* Auth buttons */}
+      <div className="flex items-center gap-2">
+        <a
+          href="/login"
+          className="text-sm font-semibold text-violet-700 border border-violet-200 bg-violet-50 hover:bg-violet-100 rounded-lg px-4 py-2 transition-colors"
+        >
+          Log in
+        </a>
+        <a
+          href="/register"
+          className="text-sm font-semibold text-white bg-violet-700 hover:bg-violet-800 rounded-lg px-4 py-2 transition-colors"
+        >
+          Sign up
+        </a>
+      </div>
+
     </div>
-  );
+  </nav>
+
+  {/* Hero */}
+  <main className="flex-1 flex items-center justify-center px-6 py-16">
+    <div className="max-w-4xl w-full space-y-4">
+
+      {/* Dark hero card */}
+      <div className="bg-[#1a1035] rounded-2xl px-8 py-14 text-center relative overflow-hidden">
+        <div className="absolute w-64 h-64 rounded-full bg-purple-600/30 blur-3xl -top-16 -right-16 pointer-events-none" />
+        <div className="absolute w-48 h-48 rounded-full bg-sky-400/20 blur-3xl -bottom-10 -left-10 pointer-events-none" />
+
+        <div className="relative z-10 space-y-5">
+          <h1 className="text-3xl font-bold text-white tracking-tight leading-snug">
+            Build something great<br />with Orion
+          </h1>
+          <p className="text-sm text-white/60 max-w-sm mx-auto leading-relaxed">
+            A simple, fast platform for modern teams. Get started in minutes — no credit card required.
+          </p>
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <a
+              href="/register"
+              className="text-sm font-semibold text-white bg-violet-600 hover:bg-violet-500 rounded-lg px-5 py-2.5 transition-colors"
+            >
+              Get started free
+            </a>
+            <a
+              href="/login"
+              className="text-sm font-semibold text-white/70 hover:text-white rounded-lg px-5 py-2.5 transition-colors"
+            >
+              Sign in →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Three feature cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {[
+          { icon: "⚡", title: "Fast setup", desc: "Up and running in under five minutes." },
+          { icon: "🔒", title: "Secure by default", desc: "Your data is encrypted and safe." },
+          { icon: "📦", title: "All in one place", desc: "Manage everything from one dashboard." },
+        ].map((f) => (
+          <div
+            key={f.title}
+            className="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-5 space-y-2"
+          >
+            <span className="text-xl">{f.icon}</span>
+            <p className="text-sm font-semibold text-gray-900">{f.title}</p>
+            <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </main>
+
+  {/* Footer */}
+  <footer className="border-t border-gray-200 px-6 py-4">
+    <div className="max-w-4xl mx-auto flex items-center justify-between">
+      <p className="text-xs text-gray-400">© 2024 Orion. All rights reserved.</p>
+      <div className="flex items-center gap-4">
+        <a href="#" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">Privacy</a>
+        <a href="#" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+  )
 }
+
+export default page
