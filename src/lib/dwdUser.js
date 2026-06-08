@@ -1,11 +1,25 @@
 import { jsPDF } from "jspdf";
+import { imageToBase64 } from "./imageToBase64";
 
-export const downloadUserPDF = (user) => {
+export const downloadUserPDF = async(user) => {
   const doc = new jsPDF();
 
   // Title
   doc.setFontSize(18);
   doc.text("User Profile Information", 20, 20);
+  // Add image if available
+  if (user.photoURL) {
+    const imageData = await imageToBase64(user.photoURL);
+
+    doc.addImage(
+      imageData,
+      "JPEG",
+      150,
+      10,
+      40,
+      40
+    );
+  }
 
   // User details
   doc.setFontSize(12);

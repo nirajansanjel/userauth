@@ -5,12 +5,14 @@ import { useState } from "react";
 import { registerUser } from "@/lib/auth.js";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { uploadToCloudinary } from "@/lib/upCl";
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [file, setFile] = useState(null);
   const router = useRouter();
 
   const {
@@ -22,7 +24,7 @@ export default function RegisterPage() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await registerUser(data.email, data.password);
+ const res = await registerUser(data.email, data.password,file);
       if (res) {
         router.push("/dashboard");
       }
@@ -232,6 +234,15 @@ export default function RegisterPage() {
               )}
             </div>
 
+<div>
+  <label htmlFor="image" className="p-1">Upload your profile picture</label>
+  <input
+  className="bg-gray-100 rounded border "
+  type="file"
+  accept="image/*"
+  onChange={(e) => setFile(e.target.files[0])}
+/>
+</div>
             {/* Terms */}
             <div
               className={`field field-checkbox ${errors.terms ? "field--error" : ""}`}

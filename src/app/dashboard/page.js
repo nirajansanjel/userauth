@@ -1,5 +1,5 @@
 "use client";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import app from "@/lib/firebase";
 import { useEffect, useState } from "react";
@@ -7,10 +7,14 @@ import { db } from "@/lib/firebase";
 import { getUserRole } from "@/lib/getRole";
 import { useRouter } from "next/navigation";
 import { downloadUserPDF } from "@/lib/dwdUser";
+import Image from "next/image";
+import { toast } from "react-toastify";
+import { uploadToCloudinary } from "@/lib/upCl";
 
 const UserDashboard = () => {
   const auth = getAuth(app);
   const [userData, setUserData] = useState(null);
+   const [file, setFile] = useState(null);
   const router = useRouter();
 
   // Listen for active login session
@@ -38,6 +42,27 @@ const UserDashboard = () => {
 
     return () => unsubscribe();
   }, []);
+
+    // Upload image handler
+  const handleUpload = async () => {
+    if (!file) return toast.error("please upload a file");
+
+    const imageUrl = await uploadToCloudinary(file);
+
+    const res =await updateDoc(doc(db, "users", userData.uid), {
+      photoURL: imageUrl
+    });
+    if(res) {
+      toast.success("photo upload sucess")
+    }
+
+    setUserData((prev) => ({
+      ...prev,
+      photoURL: imageUrl
+    }));
+  };
+
+  if (!userData) return <p>Loading...</p>;
 
   return (
     <div className="min-h-screen bg-[#f4f3ef] p-6 font-sans">
@@ -77,10 +102,24 @@ const UserDashboard = () => {
 
               <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
                 {/* Avatar */}
-                <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center text-base font-bold text-violet-700 select-none shrink-0">
-                  {userData.email?.[0]?.toUpperCase() ?? "U"}
-                </div>
-                <div>
+                {/* PROFILE IMAGE */}
+      <div className="flex flex-col"> 
+     <div>
+      <div className="flex ">
+         {userData.photoURL ? (
+          <Image
+            src={userData.photoURL}
+            width={100}
+            height={100}
+            alt=""
+            className="h-16 w-16 rounded"
+          />
+        ) : (
+         <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center text-base font-bold text-violet-700 select-none shrink-0">
+              {userData.email?.[0]?.toUpperCase() ?? "U"}
+            </div>
+        )}
+          <div className="mx-2 px-2">
                   <p className="text-sm font-semibold text-gray-900">
                     {userData.email}
                   </p>
@@ -89,6 +128,24 @@ const UserDashboard = () => {
                   </span>
                 </div>
               </div>
+      </div>
+
+      {/* FILE INPUT */}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setFile(e.target.files[0])}
+        className="bg-gray-200 border rounded flex w-1/5 m-1 p-1"
+      />
+
+      <button onClick={handleUpload}
+      className="bg-orange-200 p-1 rounded border text-sm w-1/2 ">
+        Upload Profile Picture
+      </button>
+     </div>
+         
+     </div>
+          
 
               {/* Detail rows */}
               <div className="divide-y divide-gray-100">
@@ -107,8 +164,10 @@ const UserDashboard = () => {
                 </h2>
                 <button
                   className="border-2 border-gray-200 bg-gray-300 rounded-md"
-                  onClick={() => downloadUserPDF(userData)}
-                  style={{
+                  onClick={async () => {
+    await downloadUserPDF(userData);
+  }}
+   style={{
                     marginTop: "20px",
                     padding: "10px",
                     cursor: "pointer",

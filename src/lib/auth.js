@@ -7,8 +7,17 @@ import {
 } from "firebase/auth";
 import { db } from "@/lib/firebase";
 import { toast } from "react-toastify";
+import { uploadToCloudinary } from "./upCl";
+
+
 export const auth = getAuth(app);
-export const registerUser = async (email, password) => {
+
+export const registerUser = async (email, password,file) => {
+   let photoURL = "";
+
+    if (file) {
+      photoURL = await uploadToCloudinary(file);
+    }
   const userCredential = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -16,11 +25,11 @@ export const registerUser = async (email, password) => {
   );
 
   const user = userCredential.user;
-
   await setDoc(doc(db, "users", user.uid), {
     uid: user.uid,
     email: user.email,
     role: "user",
+    photoURL: photoURL,
   });
 
   toast.success("Registration Successful");
